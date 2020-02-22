@@ -1,0 +1,30 @@
+{
+  "sections": [
+    {
+      "id": "DI",
+      "name": "section1"
+    },
+    {
+      "id": "storage",
+      "name": "section2"
+    }
+  ],
+  "options": [
+    {
+      "sectionId": "DI",
+      "values": [
+        {
+          "name": "dagger 1",
+          "description": "Old thing",
+          "officialUrl": "https://asda.asda",
+          "deprecated": true
+        },
+        {
+          "name": "koin",
+          "description": "Kotlin based service locator",
+          "officialUrl": "https://aaaa.com"
+        }
+      ]
+    }
+  ]
+}

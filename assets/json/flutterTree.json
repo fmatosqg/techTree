@@ -1,0 +1,77 @@
+{
+  "hello": "worldd",
+  "id": "rootid",
+  "name": "rootname",
+  "messages": [
+    "hello",
+    "world"
+  ],
+  "sections": [
+    {
+      "id": "Serialization",
+      "name": "serialization"
+    },
+    {
+      "id": "storage",
+      "name": "section2"
+    }
+  ],
+  "options": [
+    {
+      "sectionId": "serialization",
+      "values": [
+        {
+          "id": "serialization_manual",
+          "name": "Hand made code"
+        },
+        {
+          "name": "json_serializable",
+          "id": "json_serializable",
+          "description": "Old thing",
+          "officialUrl": "https://pub.dev/packages/json_serializable",
+          "deprecated": true,
+          "dependencies": [
+            "dev_dependencies:\n  build_runner",
+            "dependencies:\n  json_serializable",
+            "dependencies:\n  json_annotation"
+          ],
+          "notes": "Need to run a watcher to keep generated files updated every time a model is edited: `flutter packages pub run build_runner watch`"
+        },
+        {
+          "id": "built_value",
+          "name": "built_value",
+          "author": "Google",
+          "description": "Kotlin based service locator",
+          "officialUrl": "https://pub.dev/packages/built_value",
+          "notes": "Generates ==, hashCode, toString, serializer, builder and rebuild(to modify objects, similar to copy() in kotlin).\nNeed to run a watcher to keep generated files updated every time a model is edited: `flutter packages pub run build_runner watch`",
+          "dependencies": [
+            "dev_dependencies:\n  build_runner",
+            "dev_dependencies:\n  built_value_generator",
+            "dependencies:\n  built_value",
+            "dependencies:\n  built_collection"
+          ]
+        },
+        {
+          "id": "jaguar_serializer",
+          "name": "jaguar_serializer",
+          "officialUrl": "https://pub.dev/packages/jaguar_serializer"
+        }
+      ]
+    }
+  ],
+  "documentation": [
+    {
+      "sectionId": "serialization",
+      "articles": [
+        {
+          "title": "Official docs",
+          "url": "https://flutter.dev/docs/development/data-and-backend/json"
+        },
+        {
+          "title": "Comparison of manual, json_serializable and built_value",
+          "url": "https://medium.com/flutter/some-options-for-deserializing-json-with-flutter-7481325a4450"
+        }
+      ]
+    }
+  ]
+}

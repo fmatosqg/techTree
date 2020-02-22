@@ -7,7 +7,7 @@
 ## from Intellij or Android Studio
 Make sure the flutter binaries are set to the beta channel: 
 - open preferences/languages and frameworks/flutter
-
+- `flutter packages pub run build_runner   watch` (remember to run it again every time you edit pubspec.yaml because it will drop automatically)
 - pick `chrome (web)` from the device drop down
 - hit run or debug and a new chrome window should open
 - if pressing `ctrl+s` all files are immediately saved and a hot restart is triggered (you can also do that by pressing the floppy disk icon to save all). Note that if the IDE auto-saves all files it won't trigger a hot restart. Note also that this is an opt-in on the preferences/languagues and frameworks/flutter
@@ -15,7 +15,8 @@ Make sure the flutter binaries are set to the beta channel:
  
 
 ## from command line 
-`flutter run -d chrome`
+- `flutter packages pub run build_runner watch`
+- `flutter run -d chrome`
 - press `r` on console for hot reloading or `R` for hot restart
 
 # Build and deploy
