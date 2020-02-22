@@ -18,19 +18,26 @@ class LandingView extends StatelessWidget {
   }
 
   buildHeader() {
-    return Text("Header");
+    return Container();
   }
 
   buildFooter() {
     return Container(
       padding: EdgeInsets.all(20.0),
       color: Color.fromARGB(255, 100, 100, 255),
-      child: Row(
-        children: <Widget>[
-          Text(
-            "Footer",
-          ),
-        ],
+      child: Center(
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: Text(
+                "Version 0.0.1",
+              ),
+            ),
+            Expanded(
+              child: Text(""),
+            ),
+          ],
+        ),
       ),
     );
   }
