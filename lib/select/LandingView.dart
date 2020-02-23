@@ -1,16 +1,39 @@
+import 'package:androidArchitecture/domain/editing/EditorRepository.dart';
 import 'package:androidArchitecture/landing/SelectView.dart';
 import 'package:androidArchitecture/select/BreadcrumbView.dart';
 import 'package:flutter/cupertino.dart';
 
-class LandingView extends StatelessWidget {
+class LandingView extends StatefulWidget {
+  @override
+  _LandingViewState createState() => _LandingViewState();
+}
+
+class _LandingViewState extends State<LandingView> {
+  EditorRepository _editorRepository = EditorRepository.getInstance();
+
   @override
   Widget build(BuildContext context) {
+    return StreamBuilder<bool>(
+        stream: _editorRepository.getStream(),
+        builder: (context, snapshot) {
+          if (snapshot.data == true) {
+            return buildEditingView();
+          } else {
+            return buildSelectionView();
+          }
+        });
+  }
+
+  Widget buildEditingView() {
+    return Text("Edit");
+  }
+
+  Widget buildSelectionView() {
     return Center(
       child: Column(
         children: <Widget>[
           buildHeader(),
           Expanded(
-//            child: SelectView(),
             child: Row(
               children: <Widget>[
                 BreadCrumbView(),
