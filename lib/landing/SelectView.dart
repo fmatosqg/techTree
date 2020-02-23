@@ -3,12 +3,15 @@ import 'dart:convert';
 import 'package:androidArchitecture/domain/model/OptionModel.dart';
 import 'package:androidArchitecture/domain/model/TreeModel.dart';
 import 'package:androidArchitecture/domain/model/SectionModel.dart';
+import 'package:androidArchitecture/domain/model/TreeState.dart';
+import 'package:androidArchitecture/landing/ColorPallete.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 import '../serializers.dart';
+import '../domain/TreeRepository.dart';
 
 /// Allows the user to select among a list of choices.
 ///
@@ -22,59 +25,110 @@ class SelectView extends StatefulWidget {
 class _SelectViewState extends State<SelectView> {
   OptionListModel model;
 
+  TreeState _treeState = TreeState.instance;
+
   _SelectViewState();
-
-  Future<OptionListModel> readModel(BuildContext context) async {
-    var assetsPath = "assets/json/flutterTree.json";
-
-//    debugPrint("Load asset $assetsPath");
-    String jsonString = await rootBundle.loadString(assetsPath);
-
-    var a = jsonDecode(jsonString);
-
-    return serializers
-        .deserializeWith(TreeModel.serializer, a)
-        .options
-        .toList()
-        .first;
-  }
 
   @override
   void initState() {
     super.initState();
 
-    readModel(context).then((value) {
+    TreeRepository().readModel(context).then((value) {
       setState(() {
-        debugPrint(value.toString());
-        model = value;
+        model = value.options.toList().first;
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 10,
-      runSpacing: 20,
-      children: model?.values
-              ?.toList()
-              ?.map(
-                (optionModel) => RaisedButton(
-                  child: Text(optionModel.name),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                    Radius.circular(8.0),
-                  )),
-                  disabledColor: Color.fromARGB(255, 100, 100, 00),
-                  color: Color.fromARGB(255, 100, 100, 200),
-                  onPressed: () {
-                    readModel(context);
-                    debugPrint("Hello ${optionModel.name}");
-                  },
-                ),
-              )
-              ?.toList() ??
-          [],
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: Wrap(
+            spacing: 10,
+            runSpacing: 20,
+            children: model?.values
+                    ?.toList()
+                    ?.map(
+                      (optionModel) => SelectButton(
+                          _treeState.isSelected(optionModel.id),
+                          optionModel.name,
+                          optionModel.id, onPressed: () {
+                        tapButton(optionModel.id);
+                      }),
+                    )
+                    ?.toList() ??
+                [],
+          ),
+        ),
+        buildNavigation(),
+      ],
     );
+  }
+
+  Widget buildNavigation() {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Row(
+        children: <Widget>[
+          RaisedButton(
+            child: Text("Previous"),
+          ),
+          Spacer(),
+          RaisedButton(
+            child: Text("Next"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void tapButton(String id) {
+    debugPrint("Hello ");
+    setState(() {
+      _treeState.toggleSelectedState(id);
+    });
+  }
+}
+
+class SelectButton extends StatelessWidget {
+  bool isSelected;
+  String text;
+  String id;
+
+  VoidCallback onPressed;
+  SelectButton(this.isSelected, this.text, this.id, {this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton(
+      child: Text(text),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+        Radius.circular(8.0),
+      )),
+      color: getColor(),
+      elevation: getElevation(),
+      onPressed: () {
+        this.onPressed();
+      },
+    );
+  }
+
+  Color getColor() {
+    if (isSelected) {
+      return ColorPallete.yellowLemon;
+    } else {
+      return ColorPallete.yellowCustard;
+    }
+  }
+
+  double getElevation() {
+    if (isSelected) {
+      return 1;
+    } else {
+      return 4;
+    }
   }
 }

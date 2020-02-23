@@ -1,4 +1,5 @@
 import 'package:androidArchitecture/landing/SelectView.dart';
+import 'package:androidArchitecture/select/BreadcrumbView.dart';
 import 'package:flutter/cupertino.dart';
 
 class LandingView extends StatelessWidget {
@@ -9,7 +10,15 @@ class LandingView extends StatelessWidget {
         children: <Widget>[
           buildHeader(),
           Expanded(
-            child: SelectView(),
+//            child: SelectView(),
+            child: Row(
+              children: <Widget>[
+                BreadCrumbView(),
+                Expanded(
+                  child: SelectView(),
+                ),
+              ],
+            ),
           ),
           buildFooter(),
         ],
