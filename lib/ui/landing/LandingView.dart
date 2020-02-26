@@ -1,7 +1,9 @@
 import 'package:androidArchitecture/domain/editing/EditorRepository.dart';
-import 'package:androidArchitecture/landing/SelectView.dart';
+import 'package:androidArchitecture/ui/select/SelectView.dart';
 import 'package:androidArchitecture/select/BreadcrumbView.dart';
 import 'package:flutter/cupertino.dart';
+
+import '../editing/EditorView.dart';
 
 class LandingView extends StatefulWidget {
   @override
@@ -13,26 +15,40 @@ class _LandingViewState extends State<LandingView> {
 
   @override
   Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        children: <Widget>[
+          _buildHeader(),
+          Expanded(
+            child: _buildContents(context),
+          ),
+          _buildFooter(),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget _buildContents(BuildContext context) {
     return StreamBuilder<bool>(
         stream: _editorRepository.getStream(),
-        builder: (context, snapshot) {
-          if (snapshot.data == true) {
-            return buildEditingView();
+        builder: (context, isInEditMode) {
+          if (isInEditMode.data == true) {
+            return _buildEditingView();
           } else {
-            return buildSelectionView();
+            return _buildSelectionView();
           }
         });
   }
 
-  Widget buildEditingView() {
-    return Text("Edit");
+  Widget _buildEditingView() {
+    return EditorView();
   }
 
-  Widget buildSelectionView() {
+  Widget _buildSelectionView() {
     return Center(
       child: Column(
         children: <Widget>[
-          buildHeader(),
           Expanded(
             child: Row(
               children: <Widget>[
@@ -43,17 +59,16 @@ class _LandingViewState extends State<LandingView> {
               ],
             ),
           ),
-          buildFooter(),
         ],
       ),
     );
   }
 
-  buildHeader() {
+  Widget _buildHeader() {
     return Container();
   }
 
-  buildFooter() {
+  Widget _buildFooter() {
     return Container(
       padding: EdgeInsets.all(20.0),
       color: Color.fromARGB(255, 100, 100, 255),

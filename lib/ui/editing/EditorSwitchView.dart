@@ -10,35 +10,37 @@ class EditorSwitchView extends StatefulWidget {
 }
 
 class _EditorSwitchViewState extends State<EditorSwitchView> {
-  EditorRepository editorRepository = EditorRepository.getInstance();
+  EditorRepository _editorRepository = EditorRepository.getInstance();
+
+  bool _isInEditMode = false;
 
   @override
   void initState() {
     super.initState();
+
+    _editorRepository.getStream().listen((event) {
+      setState(() {
+        _isInEditMode = event;
+      });
+    });
   }
 
   Widget build(BuildContext context) {
-    return StreamBuilder<bool>(
-      stream: editorRepository.getStream(),
-      builder: (context, isInEditMode) {
-        return Row(
-          children: <Widget>[
-            Text("Editor"),
-            Switch(
-              value: isInEditMode.data ?? false,
-              onChanged: (newValue) {
-                setEditMode(newValue);
-              },
-            ),
-          ],
-        );
-      },
+    return Row(
+      children: <Widget>[
+        Switch(
+          value: _isInEditMode,
+          onChanged: (newValue) {
+            _setEditMode(newValue);
+          },
+        ),
+      ],
     );
   }
 
-  void setEditMode(bool newValue) {
+  void _setEditMode(bool newValue) {
     setState(() {
-      editorRepository.setEditorMode(newValue);
+      _editorRepository.setEditorMode(newValue);
     });
   }
 }

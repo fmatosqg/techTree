@@ -10,14 +10,18 @@ class EditorRepository {
   StreamController<bool> _controller;
 
   Stream<bool> _stream;
+  bool _lastValue = true;
 
   EditorRepository() {
-    _controller = StreamController();
+    _controller = StreamController<bool>(sync: false);
+
+//    _controller.add(true);
     _stream = _controller.stream.asBroadcastStream();
   }
 
   void setEditorMode(bool newValue) {
     debugPrint("new value $newValue");
+    _lastValue = newValue;
     _controller.add(newValue);
   }
 

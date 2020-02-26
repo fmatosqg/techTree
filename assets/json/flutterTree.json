@@ -66,10 +66,12 @@
       "sectionId": "reactive",
       "values": [
         {
-          "id": "dartstreams"
+          "id": "dartstreams",
+          "name": "RxDart"
         },
         {
-          "id": "other dart streams"
+          "id": "StreamController",
+          "name": "StreamController"
         }
       ]
     }

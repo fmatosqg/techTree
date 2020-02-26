@@ -1,5 +1,5 @@
-import 'package:androidArchitecture/select/LandingView.dart';
-import 'package:androidArchitecture/landing/SelectView.dart';
+import 'package:androidArchitecture/ui/landing/LandingView.dart';
+import 'package:androidArchitecture/ui/select/SelectView.dart';
 import 'package:androidArchitecture/ui/editing/EditorSwitchView.dart';
 import 'package:flutter/material.dart';
 
