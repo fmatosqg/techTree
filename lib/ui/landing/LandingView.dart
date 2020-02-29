@@ -1,9 +1,8 @@
 import 'package:androidArchitecture/domain/editing/EditorRepository.dart';
+import 'package:androidArchitecture/ui/editing/EditorView.dart';
+import 'package:androidArchitecture/ui/select/BreadcrumbView.dart';
 import 'package:androidArchitecture/ui/select/SelectView.dart';
-import 'package:androidArchitecture/select/BreadcrumbView.dart';
 import 'package:flutter/cupertino.dart';
-
-import '../editing/EditorView.dart';
 
 class LandingView extends StatefulWidget {
   @override
@@ -12,6 +11,15 @@ class LandingView extends StatefulWidget {
 
 class _LandingViewState extends State<LandingView> {
   EditorRepository _editorRepository = EditorRepository.getInstance();
+
+  String _sectionId;
+
+  _navigateToSection(String sectionId) {
+    debugPrint("Section name is $sectionId");
+    setState(() {
+      _sectionId = sectionId;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +36,6 @@ class _LandingViewState extends State<LandingView> {
     );
   }
 
-  @override
   Widget _buildContents(BuildContext context) {
     return StreamBuilder<bool>(
         stream: _editorRepository.getStream(),
@@ -52,9 +59,9 @@ class _LandingViewState extends State<LandingView> {
           Expanded(
             child: Row(
               children: <Widget>[
-                BreadCrumbView(),
+                BreadCrumbView(_navigateToSection),
                 Expanded(
-                  child: SelectView(),
+                  child: SelectView(_sectionId),
                 ),
               ],
             ),

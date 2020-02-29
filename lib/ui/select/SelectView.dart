@@ -1,43 +1,64 @@
-import 'dart:convert';
-
 import 'package:androidArchitecture/domain/model/OptionModel.dart';
-import 'package:androidArchitecture/domain/model/TreeModel.dart';
 import 'package:androidArchitecture/domain/model/SectionModel.dart';
 import 'package:androidArchitecture/domain/model/TreeState.dart';
-import 'package:androidArchitecture/landing/ColorPallete.dart';
-import 'package:built_collection/built_collection.dart';
+import 'package:androidArchitecture/ui/ColorPallete.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
 
-import '../../serializers.dart';
 import '../../domain/TreeRepository.dart';
 
 /// Allows the user to select among a list of choices.
 ///
 class SelectView extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return _SelectViewState();
+  final String sectionId;
+
+  final _SelectViewState _state = _SelectViewState();
+
+//  SelectView(String sectionId) {
+  SelectView(this.sectionId) {
+    debugPrint("Create selectview with id $sectionId");
+//    _state.setId(sectionId);
   }
+
+  @override
+  State<StatefulWidget> createState() => _SelectViewState();
 }
 
 class _SelectViewState extends State<SelectView> {
   OptionListModel model;
 
+  SectionModel _section;
+
   TreeState _treeState = TreeState.instance;
 
-  _SelectViewState();
+  _SelectViewState() {
+    debugPrint("_SelectViewState");
+  }
 
   @override
-  void initState() {
-    super.initState();
+  void didUpdateWidget(SelectView oldWidget) {
+    debugPrint("did update state xxx ${widget.sectionId}");
+    super.didUpdateWidget(oldWidget);
+    setId(widget.sectionId);
+  }
 
-    TreeRepository().readModel(context).then((value) {
+  void setId(String sectionId) {
+    getSectionFromId(sectionId).then((newModel) {
       setState(() {
-        model = value.options.toList().first;
+        debugPrint("new model is $newModel");
+        model = newModel;
       });
     });
+  }
+
+  Future<OptionListModel> getSectionFromId(String sectionId) async {
+    var model = await TreeRepository().readModel(context);
+
+    var options = model.options.firstWhere((option) {
+      return option.sectionId == sectionId;
+    });
+
+    return options;
   }
 
   @override

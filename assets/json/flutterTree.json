@@ -8,7 +8,7 @@
   ],
   "sections": [
     {
-      "id": "Serialization",
+      "id": "serialization",
       "name": "serialization"
     },
     {
@@ -21,6 +21,15 @@
     }
   ],
   "options": [
+    {
+      "sectionId": "storage",
+      "values": [
+        {
+          "id": "whatever",
+          "name": "what"
+        }
+      ]
+    },
     {
       "sectionId": "serialization",
       "values": [

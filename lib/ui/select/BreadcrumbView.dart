@@ -1,15 +1,31 @@
 import 'package:androidArchitecture/domain/model/SectionModel.dart';
 import 'package:androidArchitecture/domain/TreeRepository.dart';
+import 'package:androidArchitecture/ui/ColorPallete.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+/// The bar on the left of the selection view, where you can
+/// navigate to different techs to select them.
+///
 class BreadCrumbView extends StatefulWidget {
+  final Function(String sectionId) _navigateToSection;
+
+  BreadCrumbView(this._navigateToSection);
+
   @override
-  State<StatefulWidget> createState() => _BreadCrumbState();
+  State<StatefulWidget> createState() => _BreadCrumbState(_navigateToSection);
+
+//  _navigateToSection(String sectionId) {
+//    debugPrint("Section name is $sectionId");
+//  }
 }
 
 class _BreadCrumbState extends State<BreadCrumbView> {
   List<SectionModel> model;
+
+  Function(String sectionId) _navigateToSection;
+
+  _BreadCrumbState(this._navigateToSection);
 
   @override
   void initState() {
@@ -25,7 +41,7 @@ class _BreadCrumbState extends State<BreadCrumbView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color.fromARGB(255, 200, 230, 210),
+      color: ColorPallete.greenPistachio,
       child: Column(
         children: model
                 ?.toList()
@@ -33,7 +49,7 @@ class _BreadCrumbState extends State<BreadCrumbView> {
                   (section) => MaterialButton(
                     child: Text(section.name),
                     onPressed: () {
-                      navigateToSection(section.id);
+                      _navigateToSection(section.id);
                     },
                   ),
                 )
@@ -42,6 +58,4 @@ class _BreadCrumbState extends State<BreadCrumbView> {
       ),
     );
   }
-
-  navigateToSection(String sectionId) {}
 }

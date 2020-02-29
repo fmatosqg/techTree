@@ -10,13 +10,15 @@ class EditorRepository {
   StreamController<bool> _controller;
 
   Stream<bool> _stream;
-  bool _lastValue = true;
+  bool _lastValue = false;
 
   EditorRepository() {
     _controller = StreamController<bool>(sync: false);
-
-//    _controller.add(true);
     _stream = _controller.stream.asBroadcastStream();
+
+    Future.delayed(const Duration(milliseconds: 500), () {
+      _controller.add(_lastValue);
+    });
   }
 
   void setEditorMode(bool newValue) {

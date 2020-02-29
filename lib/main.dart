@@ -1,5 +1,4 @@
 import 'package:androidArchitecture/ui/landing/LandingView.dart';
-import 'package:androidArchitecture/ui/select/SelectView.dart';
 import 'package:androidArchitecture/ui/editing/EditorSwitchView.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +9,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Big fat list',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -23,7 +22,9 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home'),
+      home: MyHomePage(
+        title: 'Big fat list',
+      ),
     );
   }
 }
