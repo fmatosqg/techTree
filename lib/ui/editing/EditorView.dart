@@ -56,7 +56,7 @@ class _EditorViewState extends State<EditorView> {
         maxLines: 100,
         minLines: 1,
         decoration: InputDecoration(
-          floatingLabelBehavior: FloatingLabelBehavior.auto,
+//          floatingLabelBehavior: FloatingLabelBehavior.auto,
           labelText: label,
         ),
       ),

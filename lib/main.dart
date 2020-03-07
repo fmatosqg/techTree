@@ -1,8 +1,15 @@
+import 'package:androidArchitecture/domain/FirebaseRepository.dart';
 import 'package:androidArchitecture/ui/landing/LandingView.dart';
 import 'package:androidArchitecture/ui/editing/EditorSwitchView.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  FirebaseRepository.getInstance().init();
+
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

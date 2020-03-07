@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 class SearchBox extends StatefulWidget {
   @override
@@ -16,7 +17,7 @@ class _SearchBoxState extends State<SearchBox> {
         maxLines: 100,
         minLines: 1,
         decoration: InputDecoration(
-          floatingLabelBehavior: FloatingLabelBehavior.auto,
+//          floatingLabelBehavior: FloatingLabelBehavior.auto,
           labelText: "Search keyword",
         ),
       ),

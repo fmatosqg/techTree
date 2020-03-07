@@ -1,3 +1,4 @@
+import 'package:androidArchitecture/domain/FirebaseRepository.dart';
 import 'package:androidArchitecture/domain/model/OptionModel.dart';
 import 'package:androidArchitecture/domain/model/SectionModel.dart';
 import 'package:androidArchitecture/domain/model/TreeState.dart';
@@ -30,6 +31,7 @@ class _SelectViewState extends State<SelectView> {
   SectionModel _section;
 
   TreeState _treeState = TreeState.instance;
+  FirebaseRepository _firebaseRepository = FirebaseRepository.getInstance();
 
   _SelectViewState() {
     debugPrint("_SelectViewState");
@@ -45,10 +47,12 @@ class _SelectViewState extends State<SelectView> {
   void setId(String sectionId) {
     getSectionFromId(sectionId).then((newModel) {
       setState(() {
-        debugPrint("new model is $newModel");
+        debugPrint("new model successfull");
         model = newModel;
       });
     });
+
+    _firebaseRepository.query();
   }
 
   Future<OptionListModel> getSectionFromId(String sectionId) async {
