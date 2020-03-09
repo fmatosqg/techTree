@@ -11,29 +11,39 @@
     <meta name="apple-mobile-web-app-title" content="androidArchitecture">
     <link rel="apple-touch-icon" href="/icons/Icon-192.png">
 
+    <meta id="google-signin" name="google-signin-client_id" content="">
+
     <title>androidArchitecture</title>
     <link rel="manifest" href="/manifest.json">
 </head>
 <body>
 
-<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-firestore.js"></script>
-
+<script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-analytics.js"></script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
 
 <script>
 
-
-console.log("Here i go");
 
     // Initialize Firebase
     // See: https://support.google.com/firebase/answer/7015592
     // create web/secrets.json file and copy the same contents as secrets.dart, but note that
     // the json file uses projectID instead of projectId
+    //
+    // then add another key for google_signin with the value for the meta google-signin-client_id
 
     fetch("secrets.json")
         .then(response => response.json())
-        .then(json =>    firebase.initializeApp(json)    )
-        .then(a => console.log("Whatttt " + a.hello));
+        .then(json =>  {
+            firebase.initializeApp(json);
+            firebase.analytics();
+
+            document.getElementById('google-signin')
+                .setAttribute('content', json.google_signin);
+        }  )
+        .then( console.log("Firebase loading worked"));
+
 
 </script>
 

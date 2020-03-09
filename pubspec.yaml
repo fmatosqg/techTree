@@ -21,13 +21,13 @@ dependencies:
   built_value: 7.0.9
   built_collection: 4.3.2
 
-  # this is firebase for dart web, not flutter
-#  firebase: 7.2.1
-
   # this covers flutter over android, ios and web
   cloud_firestore: 0.13.2
   firebase_core: 0.4.4+2
-  firebase_analytics: ^5.0.11
+  firebase_analytics: 5.0.11
+
+  firebase_auth: 0.15.5+2
+  google_sign_in: 4.1.4
 
   flutter:
     sdk: flutter

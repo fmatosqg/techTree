@@ -1,3 +1,4 @@
+import 'package:androidArchitecture/auth/LoginView.dart';
 import 'package:androidArchitecture/domain/editing/EditorRepository.dart';
 import 'package:androidArchitecture/ui/editing/EditorView.dart';
 import 'package:androidArchitecture/ui/select/BreadcrumbView.dart';

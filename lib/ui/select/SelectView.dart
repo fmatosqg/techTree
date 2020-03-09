@@ -59,9 +59,12 @@ class _SelectViewState extends State<SelectView> {
     var model = await TreeRepository().readModel(context);
 
     var options = model.options.firstWhere((option) {
-      return option.sectionId == sectionId;
+      return option?.sectionId == sectionId ?? "";
+    }, orElse: () {
+      return OptionListModel();
     });
 
+    debugPrint("Option is what? $options ");
     return options;
   }
 

@@ -3,6 +3,8 @@ import 'package:androidArchitecture/ui/landing/LandingView.dart';
 import 'package:androidArchitecture/ui/editing/EditorSwitchView.dart';
 import 'package:flutter/material.dart';
 
+import 'auth/LoginView.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -83,7 +85,8 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Row(
           children: <Widget>[
             Expanded(child: Text(widget.title)),
-            EditorSwitchView()
+            EditorSwitchView(),
+            LoginView(),
           ],
         ),
       ),

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/widgets.dart";
 import 'package:flutter/material.dart';
 import "package:firebase_core/firebase_core.dart";
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../secrets.dart';
 
@@ -31,8 +32,11 @@ class FirebaseRepository {
 
   static FirebaseRepository getInstance() => _instance;
 
+  GoogleSignIn _googleSignIn;
+
   init() async {
     _configure();
+    _configureGoogleSignIn();
   }
 
   query() {
@@ -56,17 +60,19 @@ class FirebaseRepository {
       options: firebaseOptions,
     );
     assert(app != null);
-    print("Configured '$app'");
+
+    Map<String, String> document = {
+      'id': 'id22',
+      'name': 'write test 33',
+      'hello': 'worlddd'
+    };
+
+    try {
+      Firestore.instance.collection("section")?.add(document);
+    } catch (e) {
+      debugPrint("Something failed $e");
+    }
   }
 
-//  Future<void> _allApps() async {
-//    final List<FirebaseApp> apps = await FirebaseApp.allApps();
-//    print('Currently configured apps: $apps');
-//  }
-//
-//  Future<void> _options() async {
-//    final FirebaseApp app = await FirebaseApp.appNamed(name);
-//    final FirebaseOptions options = await app?.options;
-//    print('Current options for app $name: $options');
-//  }
+  void _configureGoogleSignIn() {}
 }

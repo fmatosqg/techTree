@@ -16,7 +16,7 @@ Make sure the flutter binaries are set to the beta channel:
 
 ## from command line 
 - `flutter packages pub run build_runner watch`
-- `flutter run -d chrome`
+- `flutter run -d chrome --web-port 5000` where port 5000 was specified as authorized for google sign in on https://console.developers.google.com/apis/credentials/oauthclient/  then click on Credentials / OAUTH 2.0 client ids and then click edit.
 - press `r` on console for hot reloading or `R` for hot restart
 
 # Build and deploy
