@@ -14,10 +14,6 @@ class BreadCrumbView extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => _BreadCrumbState(_navigateToSection);
-
-//  _navigateToSection(String sectionId) {
-//    debugPrint("Section name is $sectionId");
-//  }
 }
 
 class _BreadCrumbState extends State<BreadCrumbView> {
@@ -41,7 +37,7 @@ class _BreadCrumbState extends State<BreadCrumbView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: ColorPallete.greenPistachio,
+      color: ColorPallete.of(context).breadCrumbBackground,
       child: Column(
         children: model
                 ?.toList()

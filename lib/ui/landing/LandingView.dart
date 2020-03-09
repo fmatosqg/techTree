@@ -1,5 +1,6 @@
 import 'package:androidArchitecture/auth/LoginView.dart';
 import 'package:androidArchitecture/domain/editing/EditorRepository.dart';
+import 'package:androidArchitecture/ui/ColorPallete.dart';
 import 'package:androidArchitecture/ui/editing/EditorView.dart';
 import 'package:androidArchitecture/ui/select/BreadcrumbView.dart';
 import 'package:androidArchitecture/ui/select/SelectView.dart';
@@ -31,7 +32,7 @@ class _LandingViewState extends State<LandingView> {
           Expanded(
             child: _buildContents(context),
           ),
-          _buildFooter(),
+          _buildFooter(context),
         ],
       ),
     );
@@ -76,10 +77,10 @@ class _LandingViewState extends State<LandingView> {
     return Container();
   }
 
-  Widget _buildFooter() {
+  Widget _buildFooter(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(20.0),
-      color: Color.fromARGB(255, 100, 100, 255),
+      color: ColorPallete.of(context).getTheme().primaryColor,
       child: Center(
         child: Row(
           children: <Widget>[

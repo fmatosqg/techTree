@@ -1,12 +1,6 @@
-import 'dart:convert';
-
-import 'package:androidArchitecture/ui/ColorPallete.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
-import "package:http/http.dart" as http;
 
 ///
 /// Adds UI that allows anonymous users to log in using a Google account.
@@ -65,8 +59,7 @@ class _LoginViewState extends State<LoginView> {
         ),
       );
     } else {
-      return FlatButton(
-        textColor: ColorPallete.greenPistachio,
+      return OutlineButton(
         child: const Text('LOG IN'),
         onPressed: _handleSignIn,
       );

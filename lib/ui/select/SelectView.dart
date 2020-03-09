@@ -73,39 +73,29 @@ class _SelectViewState extends State<SelectView> {
     return Column(
       children: <Widget>[
         Expanded(
-          child: Wrap(
-            spacing: 10,
-            runSpacing: 20,
-            children: model?.values
-                    ?.toList()
-                    ?.map(
-                      (optionModel) => SelectButton(
-                          _treeState.isSelected(optionModel.id),
-                          optionModel.name,
-                          optionModel.id, onPressed: () {
-                        tapButton(optionModel.id);
-                      }),
-                    )
-                    ?.toList() ??
-                [],
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: buildToggleButtons(),
           ),
         ),
-        buildNavigation(),
+        buildNavigation(context),
       ],
     );
   }
 
-  Widget buildNavigation() {
+  Widget buildNavigation(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Row(
         children: <Widget>[
           RaisedButton(
             child: Text("Previous"),
+            onPressed: () {},
           ),
           Spacer(),
           RaisedButton(
             child: Text("Next"),
+            onPressed: () {},
           ),
         ],
       ),
@@ -118,8 +108,31 @@ class _SelectViewState extends State<SelectView> {
       _treeState.toggleSelectedState(id);
     });
   }
+
+  buildToggleButtons() {
+    return Wrap(
+      spacing: 10,
+      runSpacing: 20,
+      children: model?.values
+              ?.toList()
+              ?.map(
+                (optionModel) => SelectButton(
+                  _treeState.isSelected(optionModel.id),
+                  optionModel.name,
+                  optionModel.id,
+                  onPressed: () {
+                    tapButton(optionModel.id);
+                  },
+                ),
+              )
+              ?.toList() ??
+          [],
+    );
+  }
 }
 
+/// Represents a particular node on the tech tree, which can be selected or disabled.
+///
 class SelectButton extends StatelessWidget {
   bool isSelected;
   String text;
@@ -131,12 +144,19 @@ class SelectButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RaisedButton(
-      child: Text(text),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          text,
+          textScaleFactor: 1.3,
+        ),
+      ),
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-        Radius.circular(8.0),
-      )),
-      color: getColor(),
+        borderRadius: BorderRadius.all(
+          Radius.circular(8.0),
+        ),
+      ),
+      color: getColor(context),
       elevation: getElevation(),
       onPressed: () {
         this.onPressed();
@@ -144,11 +164,14 @@ class SelectButton extends StatelessWidget {
     );
   }
 
-  Color getColor() {
+  Color getColor(BuildContext context) {
     if (isSelected) {
-      return ColorPallete.yellowLemon;
+      return ColorPallete.of(context)
+          .getTheme()
+          .toggleButtonsTheme
+          .selectedColor;
     } else {
-      return ColorPallete.yellowCustard;
+      return ColorPallete.of(context).getTheme().toggleButtonsTheme.color;
     }
   }
 
