@@ -1,6 +1,8 @@
+import 'package:androidArchitecture/domain/FirebaseRepository.dart';
 import 'package:androidArchitecture/domain/model/SectionModel.dart';
 import 'package:androidArchitecture/domain/TreeRepository.dart';
 import 'package:androidArchitecture/ui/ColorPallete.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +25,7 @@ class _BreadCrumbState extends State<BreadCrumbView> {
 
   _BreadCrumbState(this._navigateToSection);
 
+  var documentCount = -1;
   @override
   void initState() {
     super.initState();
@@ -30,6 +33,21 @@ class _BreadCrumbState extends State<BreadCrumbView> {
     TreeRepository().readModel(context).then((value) {
       setState(() {
         model = value.sections.toList();
+      });
+    });
+
+    FirebaseRepository.getInstance()
+        .googleSignIn
+        .onCurrentUserChanged
+        .listen((account) {
+      if (account != null) {
+        FirebaseRepository.getInstance().insert(account.id);
+      }
+    });
+
+    Firestore.instance.collection("section").snapshots().listen((event) {
+      setState(() {
+        documentCount = event.documents.length;
       });
     });
   }
@@ -43,7 +61,7 @@ class _BreadCrumbState extends State<BreadCrumbView> {
                 ?.toList()
                 ?.map(
                   (section) => MaterialButton(
-                    child: Text(section.name),
+                    child: Text(section.name + " $documentCount "),
                     onPressed: () {
                       _navigateToSection(section.id);
                     },

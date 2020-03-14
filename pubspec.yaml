@@ -23,7 +23,7 @@ dependencies:
 
   # this covers flutter over android, ios and web
   cloud_firestore: 0.13.2
-  firebase_core: 0.4.4+2
+  firebase_core: 0.4.4+3
   firebase_analytics: 5.0.11
 
   firebase_auth: 0.15.5+2
