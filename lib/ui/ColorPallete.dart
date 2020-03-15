@@ -40,10 +40,10 @@ class ColorPallete {
         buttonColor: greenLime,
       ),
       toggleButtonsTheme: parentTheme.toggleButtonsTheme.copyWith(
-          color: orange,
+          color: orangeDark,
           highlightColor: orangeLight,
           hoverColor: orangeLight,
-          selectedColor: orangeDark),
+          selectedColor: orange),
     );
   }
 

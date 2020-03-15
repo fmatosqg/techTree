@@ -19,6 +19,15 @@ class TreeRepository {
         _getLeafTableName(), document.getMap());
   }
 
+  Stream<SectionDocument> getSectionById(String sectionId) {
+    return firestore
+        .getDocumentList(_getSectionTableName())
+        .map((event) => SectionDocument.fromFirebase(
+              event.documents
+                  .firstWhere((element) => element.documentID == sectionId),
+            ));
+  }
+
   Stream<Iterable<SectionDocument>> getAllSections() {
     return firestore.getDocumentList(_getSectionTableName()).map(
           (event) => event.documents.map(

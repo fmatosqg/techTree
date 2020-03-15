@@ -1,3 +1,4 @@
+import 'package:androidArchitecture/domain/TreeRepository.dart';
 import 'package:flutter/material.dart';
 
 import '../ColorPallete.dart';
@@ -52,7 +53,9 @@ class NewSectionView extends StatelessWidget {
 
     var firstFocusNode = FocusNode();
 
-    FocusScope.of(context).requestFocus(firstFocusNode);
+    Future.delayed(const Duration(milliseconds: 0), () {
+      FocusScope.of(context).requestFocus(firstFocusNode);
+    });
 
     var firstKey = getInputIds().entries.first.key;
 
@@ -145,8 +148,13 @@ class NewSectionView extends StatelessWidget {
   }
 }
 
+/// Like [NewSectionView] but for creating a new leaf under the section
+///
+///
 class NewLeafView extends NewSectionView {
   String _sectionId;
+
+  var _treeRepository = TreeRepository();
 
   NewLeafView(
       this._sectionId, Function actionClose, Function actionSaveDocument)
@@ -169,7 +177,14 @@ class NewLeafView extends NewSectionView {
         1,
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 12),
-          child: Text("Section: $_sectionId"),
+          child: StreamBuilder<SectionDocument>(
+              stream: _treeRepository.getSectionById(_sectionId),
+              builder: (context, snapshot) {
+                return Text(
+                  "Section ${snapshot?.data?.name}",
+                  textScaleFactor: 1.3,
+                );
+              }),
         ),
       );
   }
