@@ -14,7 +14,7 @@ class SectionDocument extends TechTreeDocument {
 
   SectionDocument.fromFirebase(DocumentSnapshot doc) {
     this.id = doc.documentID;
-    this.name = doc.data['name'] as String;
+    this.name = doc.data['name'];
   }
 
   @override
@@ -25,5 +25,24 @@ class SectionDocument extends TechTreeDocument {
   @override
   Map<String, String> getMap() {
     return {'name': name};
+  }
+}
+
+class LeafDocument extends TechTreeDocument {
+  String id;
+  String sectionId;
+  String name;
+
+  LeafDocument({this.sectionId, this.name});
+
+  LeafDocument.fromFirebase(DocumentSnapshot doc) {
+    this.id = doc.documentID;
+    this.sectionId = doc['sectionId'];
+    this.name = doc.data['name'];
+  }
+
+  @override
+  Map<String, String> getMap() {
+    return {'sectionId': sectionId, 'name': name};
   }
 }

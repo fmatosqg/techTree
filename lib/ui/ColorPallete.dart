@@ -48,6 +48,8 @@ class ColorPallete {
   }
 
   final breadCrumbBackground = orangeDark;
+  final breadCrumbHighlightedColor = orange;
+
   final modalBackground = grey30percent;
 
   ThemeData getTheme() {

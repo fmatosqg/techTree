@@ -28,10 +28,16 @@ class TreeRepository {
   }
 
   /// Tries to insert document and returns true when insertion is successfull
-  Future<bool> saveDocument(SectionDocument document) async {
+  Future<bool> saveSectionDocument(SectionDocument document) async {
     debugPrint("Adding document $document");
     return await firestore.insertDocument(
         _getSectionTableName(), document.getMap());
+  }
+
+  Future<bool> saveLeafDocument(LeafDocument document) async {
+    debugPrint("Adding document $document");
+    return await firestore.insertDocument(
+        _getLeafTableName(), document.getMap());
   }
 
   Stream<Iterable<SectionDocument>> getAllSections() {
@@ -42,7 +48,21 @@ class TreeRepository {
         );
   }
 
+  Stream<Iterable<LeafDocument>> getLeafList(String sectionId) {
+    return firestore.getDocumentList(_getLeafTableName()).map(
+          (event) => event.documents
+              .where((element) => element.data['sectionId'] == sectionId)
+              .map(
+                (doc) => LeafDocument.fromFirebase(doc),
+              ),
+        );
+  }
+
   String _getSectionTableName() {
     return kReleaseMode ? "section" : "section_debug";
+  }
+
+  String _getLeafTableName() {
+    return kReleaseMode ? "leaf" : "leaf_debug";
   }
 }

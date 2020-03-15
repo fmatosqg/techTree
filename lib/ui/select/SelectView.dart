@@ -3,6 +3,7 @@ import 'package:androidArchitecture/domain/model/OptionModel.dart';
 import 'package:androidArchitecture/domain/model/SectionModel.dart';
 import 'package:androidArchitecture/domain/model/TreeState.dart';
 import 'package:androidArchitecture/ui/ColorPallete.dart';
+import 'package:androidArchitecture/ui/editing/TechTreeDocument.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -15,10 +16,8 @@ class SelectView extends StatefulWidget {
 
   final _SelectViewState _state = _SelectViewState();
 
-//  SelectView(String sectionId) {
   SelectView(this.sectionId) {
     debugPrint("Create selectview with id $sectionId");
-//    _state.setId(sectionId);
   }
 
   @override
@@ -26,61 +25,11 @@ class SelectView extends StatefulWidget {
 }
 
 class _SelectViewState extends State<SelectView> {
-  OptionListModel model;
-
-  SectionModel _section;
-
+  TreeRepository _treeRepository = TreeRepository();
   TreeState _treeState = TreeState.instance;
-  FirebaseRepository _firebaseRepository = FirebaseRepository.getInstance();
 
   _SelectViewState() {
     debugPrint("_SelectViewState");
-  }
-
-  @override
-  void didUpdateWidget(SelectView oldWidget) {
-    debugPrint("did update state xxx ${widget.sectionId}");
-    super.didUpdateWidget(oldWidget);
-    setId(widget.sectionId);
-  }
-
-  void setId(String sectionId) {
-    getSectionFromId(sectionId).then((newModel) {
-      setState(() {
-        debugPrint("new model successfull");
-        model = newModel;
-      });
-    });
-
-    _firebaseRepository.query();
-  }
-
-  Future<OptionListModel> getSectionFromId(String sectionId) async {
-    var model = await TreeRepository().readModel(context);
-
-    var options = model.options.firstWhere((option) {
-      return option?.sectionId == sectionId ?? "";
-    }, orElse: () {
-      return OptionListModel();
-    });
-
-    debugPrint("Option is what? $options ");
-    return options;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: buildToggleButtons(),
-          ),
-        ),
-        buildNavigation(context),
-      ],
-    );
   }
 
   Widget buildNavigation(BuildContext context) {
@@ -109,24 +58,33 @@ class _SelectViewState extends State<SelectView> {
     });
   }
 
-  buildToggleButtons() {
-    return Wrap(
-      spacing: 10,
-      runSpacing: 20,
-      children: model?.values
-              ?.toList()
-              ?.map(
-                (optionModel) => SelectButton(
-                  _treeState.isSelected(optionModel.id),
-                  optionModel.name,
-                  optionModel.id,
-                  onPressed: () {
-                    tapButton(optionModel.id);
-                  },
-                ),
-              )
-              ?.toList() ??
-          [],
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<Iterable<LeafDocument>>(
+        stream: _treeRepository.getLeafList(widget.sectionId),
+        builder: (context, snapshop) {
+          return _buildLeaves(snapshop.data);
+        });
+  }
+
+  Widget _buildLeaves(Iterable<LeafDocument> sectionList) {
+    return Container(
+      alignment: Alignment.topCenter,
+      padding: EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+      child: Wrap(
+        spacing: 10,
+        runSpacing: 20,
+        children: sectionList?.toList()?.map(
+              (leaf) {
+                return SelectButton(
+                    _treeState.isSelected(leaf.id), leaf.name, leaf.id,
+                    onPressed: () {
+                  tapButton(leaf.id);
+                });
+              },
+            )?.toList() ??
+            [Container()],
+      ),
     );
   }
 }
@@ -147,7 +105,7 @@ class SelectButton extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Text(
-          text,
+          text ?? "",
           textScaleFactor: 1.3,
         ),
       ),

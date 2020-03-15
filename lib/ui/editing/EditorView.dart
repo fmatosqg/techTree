@@ -1,11 +1,11 @@
 import 'package:androidArchitecture/domain/TreeRepository.dart';
-import 'package:androidArchitecture/domain/model/TreeModel.dart';
 import 'package:androidArchitecture/ui/ColorPallete.dart';
 import 'package:androidArchitecture/ui/select/BreadcrumbView.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:androidArchitecture/ui/select/SelectView.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'NewSectionView.dart';
 import 'TechTreeDocument.dart';
 
 class EditorView extends StatefulWidget {
@@ -19,6 +19,7 @@ class _EditorViewState extends State<EditorView> {
   String _sectionId;
 
   var _isAddingNewSection = false;
+  var _isAddingNewLeaf = false;
 
   ///
   /// Builds on a stack the 1st plane (adding new section/leaf) and
@@ -34,18 +35,43 @@ class _EditorViewState extends State<EditorView> {
   }
 
   ///
-  /// Builds the plane that matches the view port, and is not meant for typing
+  /// Builds the plane that matches the view port, and is not meant for typing (editing/creating).
+  ///
+  /// It holds the breadcrumb on the left, and the tree leaves selection on the middle and right
   Widget _build2ndPlane(BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.max,
       children: <Widget>[
-        Flexible(
-          flex: 1,
-          fit: FlexFit.loose,
-          child: Stack(
-            children: [
-              BreadCrumbView(_navigateToSection),
-              buildAddButton(_actionAddSection),
-            ],
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Flexible(
+              flex: 1,
+              fit: FlexFit.loose,
+              child: Stack(
+                children: [
+                  BreadCrumbView(_navigateToSection),
+                  buildAddButton(_actionAddSection),
+                ],
+              ),
+            ),
+          ],
+        ),
+        Expanded(
+          child: Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Expanded(
+                  child: Stack(
+                    children: <Widget>[
+                      SelectView(_sectionId),
+                      buildAddButton(_actionAddLeaf)
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -72,30 +98,13 @@ class _EditorViewState extends State<EditorView> {
     );
   }
 
-  buildSectionList() {
-    var tree = _treeRepository.readModel(context);
-
-    return StreamBuilder<TreeModel>(
-        stream: tree.asStream(),
-        builder: (context, treeModel) {
-          return ListView.builder(
-            itemCount: treeModel?.data?.sections?.length ?? 0,
-            itemBuilder: (context, index) {
-              var model = treeModel.data.sections[index];
-
-              return Text(model.name);
-            },
-          );
-        });
-  }
-
-  buildOptionList() {
-    return Container();
-  }
-
   _buildSectionPlane(BuildContext context) {
     if (_isAddingNewSection) {
-      return NewSection(_actionDoneAddingSection, _actionSaveDocument);
+      return NewSectionView(
+          _actionDoneAddingSection, _actionSaveSectionDocument);
+    } else if (_isAddingNewLeaf) {
+      return NewLeafView(
+          _sectionId, _actionDoneAddingLeaf, _actionSaveLeafDocument);
     } else {
       return Container();
     }
@@ -104,7 +113,6 @@ class _EditorViewState extends State<EditorView> {
   ////////////////////////////////////////////////
   // view listeners
   _actionAddSection() {
-    debugPrint("add section plus");
     setState(() {
       _isAddingNewSection = true;
     });
@@ -116,105 +124,47 @@ class _EditorViewState extends State<EditorView> {
     });
   }
 
-  /// Saves document and closes modal when insertion is successfull
-  _actionSaveDocument(TechTreeDocument document) {
-    _treeRepository.saveDocument(document).then((isInsertSuccessfull) {
-      if (isInsertSuccessfull) {
-        _actionDoneAddingSection();
-      } else {
-        // TODO show error message
-      }
+  _actionAddLeaf() {
+    setState(() {
+      _isAddingNewLeaf = true;
     });
   }
-}
 
-class NewSection extends StatelessWidget {
-  Function _actionClose;
-  Function _actionSaveDocument;
-
-  Map<String, TextEditingController> controllerMap = Map();
-
-  NewSection(this._actionClose, this._actionSaveDocument);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: double.infinity,
-      width: double.infinity,
-      color: ColorPallete.of(context).modalBackground,
-      child: Wrap(
-        children: <Widget>[
-          Card(
-            margin: const EdgeInsets.all(32.0),
-            child: Container(
-              margin: const EdgeInsets.all(32.0),
-              child: Wrap(children: _buildForm()),
-            ),
-            elevation: 4,
-          ),
-        ],
-      ),
-    );
-    ;
+  _actionDoneAddingLeaf() {
+    setState(() {
+      _isAddingNewLeaf = false;
+    });
   }
 
-  List<Widget> _buildForm() {
-    var map = {'name': 'New section name'};
-
-    List<String> keyList = ["name"];
-
-    controllerMap.clear();
-
-    return map.entries
-        .map(
-          (e) => _buildInputText(e.key, e.value),
-        )
-        .toList()
-          ..insert(0, _buildCloseButton())
-          ..add(_buildSaveButton());
+  /// Saves document and closes modal when insertion is successfull
+  ///
+  /// - document: document to be saved
+  /// - shouldStopEditing: if the modal should be dismissed after a successful save
+  ///
+  /// returns bool: true when document was saved successfully
+  ///
+  Future<bool> _actionSaveSectionDocument(
+      bool shouldStopEditing, TechTreeDocument document) {
+    return _actionSaveDocument(
+        shouldStopEditing, () => _treeRepository.saveSectionDocument(document));
   }
 
-  Widget _buildInputText(String key, String value) {
-    var controller =
-        controllerMap.putIfAbsent(key, () => TextEditingController());
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: TextField(
-        maxLines: 100,
-        minLines: 1,
-        controller: controller,
-        decoration: InputDecoration(
-          floatingLabelBehavior: FloatingLabelBehavior.auto,
-          labelText: value,
-        ),
-      ),
-    );
+  Future<bool> _actionSaveLeafDocument(
+      bool shouldStopEditing, TechTreeDocument document) {
+    return _actionSaveDocument(
+        shouldStopEditing, () => _treeRepository.saveLeafDocument(document));
   }
 
-  Widget _buildCloseButton() {
-    return Container(
-      alignment: Alignment.topLeft,
-// TODO use proper navigation and CloseButton
-//      child: CloseButton(),
-      child: IconButton(
-        icon: Icon(Icons.close),
-        onPressed: _actionClose,
-      ),
-    );
-  }
+  Future<bool> _actionSaveDocument(
+      bool shouldStopEditing, Future<bool> Function() saveDocument) {
+    var isSuccess = saveDocument();
 
-  Widget _buildSaveButton() {
-    return RaisedButton(
-      child: Text("Save"),
-      onPressed: () {
-        _actionSaveDocument(_getSectionDocument(controllerMap));
-      },
-    );
-  }
+    isSuccess.then((value) {
+      if (value && shouldStopEditing) {
+        _actionDoneAddingSection();
+      }
+    });
 
-  TechTreeDocument _getSectionDocument(
-      Map<String, TextEditingController> controllerMap) {
-    return SectionDocument(name: controllerMap["name"].text);
+    return isSuccess;
   }
 }

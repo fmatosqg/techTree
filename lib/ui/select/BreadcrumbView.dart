@@ -4,6 +4,7 @@ import 'package:androidArchitecture/domain/TreeRepository.dart';
 import 'package:androidArchitecture/ui/ColorPallete.dart';
 import 'package:androidArchitecture/ui/editing/EditorView.dart';
 import 'package:androidArchitecture/ui/editing/TechTreeDocument.dart';
+import 'package:built_value/built_value.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class BreadCrumbView extends StatefulWidget {
 }
 
 class _BreadCrumbState extends State<BreadCrumbView> {
-  List<SectionModel> model;
+  String _selectedSectionId;
 
   Function(String sectionId) _navigateToSection;
 
@@ -34,17 +35,18 @@ class _BreadCrumbState extends State<BreadCrumbView> {
     return StreamBuilder(
         stream: _treeRepository.getAllSections(),
         builder: (context, snapshop) {
-          return _buildSections(snapshop.data);
+          return _buildSections(context, snapshop.data);
         });
   }
 
-  Widget _buildSections(Iterable<SectionDocument> sectionList) {
+  Widget _buildSections(
+      BuildContext context, Iterable<SectionDocument> sectionList) {
     return Container(
       color: ColorPallete.of(context).breadCrumbBackground,
       child: Column(
         children: sectionList?.toList()?.map(
               (section) {
-                return _buildSectionButton(section);
+                return _buildSectionButton(context, section);
               },
             )?.toList() ??
             [Container()],
@@ -52,12 +54,24 @@ class _BreadCrumbState extends State<BreadCrumbView> {
     );
   }
 
-  Widget _buildSectionButton(SectionDocument section) {
+  Widget _buildSectionButton(BuildContext context, SectionDocument section) {
     return FlatButton(
+      color: _getButtonColor(context, section.id),
       child: Text(section?.name ?? "empty"),
       onPressed: () {
         _navigateToSection(section?.id ?? "empty");
+        setState(() {
+          _selectedSectionId = section.id;
+        });
       },
     );
+  }
+
+  Color _getButtonColor(BuildContext context, String sectionId) {
+    if (_selectedSectionId == sectionId) {
+      return ColorPallete.of(context).breadCrumbHighlightedColor;
+    } else {
+      return Colors.transparent;
+    }
   }
 }
