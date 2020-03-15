@@ -4,6 +4,10 @@
 - Reference on how to write documentation: https://dart.dev/guides/language/effective-dart/documentation
 
 # Setup
+## git ignored files
+- download google-services.json from firebase console and put in `android/app`
+- write files `lib/secrets.dart` and `web/secrets.json` by hand following instructions in `index.html` and `FirebaseRepository.dart` (TODO move instructions to here)
+
 ## Firebase auth
 Documentation for web: https://pub.dev/packages/google_sign_in_web
 Go to https://console.developers.google.com/apis/credentials for configuration.

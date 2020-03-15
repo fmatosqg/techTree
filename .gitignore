@@ -42,3 +42,5 @@ lib/generated_plugin_registrant.dart
 # secrets
 lib/secrets.dart
 web/secrets.json
+
+android/app/google-services.json
