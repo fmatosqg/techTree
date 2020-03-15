@@ -18,9 +18,6 @@ environment:
 
 dependencies:
 
-  built_value: 7.0.9
-  built_collection: 4.3.2
-
   # this covers flutter over android, ios and web
   cloud_firestore: 0.13.2
   firebase_core: 0.4.4+3

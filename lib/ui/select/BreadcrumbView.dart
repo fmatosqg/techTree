@@ -1,11 +1,6 @@
-import 'package:androidArchitecture/domain/FirebaseRepository.dart';
-import 'package:androidArchitecture/domain/model/SectionModel.dart';
 import 'package:androidArchitecture/domain/TreeRepository.dart';
 import 'package:androidArchitecture/ui/ColorPallete.dart';
-import 'package:androidArchitecture/ui/editing/EditorView.dart';
 import 'package:androidArchitecture/ui/editing/TechTreeDocument.dart';
-import 'package:built_value/built_value.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

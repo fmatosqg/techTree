@@ -1,6 +1,3 @@
-import 'package:androidArchitecture/domain/FirebaseRepository.dart';
-import 'package:androidArchitecture/domain/model/OptionModel.dart';
-import 'package:androidArchitecture/domain/model/SectionModel.dart';
 import 'package:androidArchitecture/domain/model/TreeState.dart';
 import 'package:androidArchitecture/ui/ColorPallete.dart';
 import 'package:androidArchitecture/ui/editing/TechTreeDocument.dart';
