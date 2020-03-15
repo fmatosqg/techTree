@@ -26,6 +26,9 @@ class _EditorSwitchViewState extends State<EditorSwitchView> {
   }
 
   Widget build(BuildContext context) {
+    if (_isInEditMode == null) {
+      return Container();
+    }
     return Row(
       children: <Widget>[
         Switch(

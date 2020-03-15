@@ -1,3 +1,4 @@
+import 'package:androidArchitecture/ui/editing/EditorView.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/widgets.dart";
@@ -86,6 +87,25 @@ class FirebaseRepository {
     }
 
     return false;
+  }
+
+  /// Inserts document and returns true if successfull
+  Future<bool> insertDocument(
+      String tableName, Map<String, String> document) async {
+    try {
+      var d = await Firestore.instance.collection(tableName)?.add(document);
+
+      debugPrint(
+          "Success inserting document on '$tableName': '$document': '$d'");
+      return true;
+    } catch (e) {
+      print("Error inserting document on '$tableName': '$document'");
+      return false;
+    }
+  }
+
+  Stream<QuerySnapshot> getDocumentList(String tableName) {
+    return Firestore.instance.collection(tableName).snapshots();
   }
 
   void _configureGoogleSignIn() {}

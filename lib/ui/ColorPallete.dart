@@ -18,6 +18,8 @@ class ColorPallete {
   static const orangeDark = Color(0xffca9b52);
   static const orangeLight = Color(0xffffffb0);
 
+  static const grey30percent = Color(0x4c000000);
+
   //////////////////
   static ColorPallete of(BuildContext context) {
     return ColorPallete(context);
@@ -46,6 +48,7 @@ class ColorPallete {
   }
 
   final breadCrumbBackground = orangeDark;
+  final modalBackground = grey30percent;
 
   ThemeData getTheme() {
     return _themeData;
