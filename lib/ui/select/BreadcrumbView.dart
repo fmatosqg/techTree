@@ -1,3 +1,4 @@
+import 'package:androidArchitecture/domain/ServiceLocator.dart';
 import 'package:androidArchitecture/domain/TreeRepository.dart';
 import 'package:androidArchitecture/ui/ColorPallete.dart';
 import 'package:androidArchitecture/ui/editing/TechTreeDocument.dart';
@@ -19,18 +20,18 @@ class BreadCrumbView extends StatefulWidget {
 class _BreadCrumbState extends State<BreadCrumbView> {
   String _selectedSectionId;
 
-  var _techId = TreeRepository.TechIdAndroid;
+  final _techId = TreeDao.TechIdAndroid;
 
   Function(String sectionId, String sectionName) _navigateToSection;
 
   _BreadCrumbState(this._navigateToSection);
 
-  final _treeRepository = TreeRepository();
+  final _treeDao = ServiceLocator.instance.getTreeDao();
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: _treeRepository.getAllSections(_techId),
+        stream: _treeDao.getAllSections(_techId),
         builder: (context, snapshop) {
           return _buildSections(context, snapshop.data);
         });

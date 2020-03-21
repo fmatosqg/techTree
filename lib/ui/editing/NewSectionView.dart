@@ -1,3 +1,4 @@
+import 'package:androidArchitecture/domain/ServiceLocator.dart';
 import 'package:androidArchitecture/domain/TreeRepository.dart';
 import 'package:flutter/material.dart';
 
@@ -151,9 +152,9 @@ class NewSectionView extends StatelessWidget {
 ///
 ///
 class NewLeafView extends NewSectionView {
-  String _sectionId;
+  final String _sectionId;
 
-  var _treeRepository = TreeRepository();
+  final _treeDao = ServiceLocator.instance.getTreeDao();
 
   NewLeafView(
       this._sectionId, Function actionClose, Function actionSaveDocument)
@@ -177,7 +178,7 @@ class NewLeafView extends NewSectionView {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 12),
           child: StreamBuilder<SectionDocument>(
-              stream: _treeRepository.getSectionById(_sectionId),
+              stream: _treeDao.getSectionById(_sectionId),
               builder: (context, snapshot) {
                 return Text(
                   "Section ${snapshot?.data?.name}",

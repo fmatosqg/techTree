@@ -1,3 +1,4 @@
+import 'package:androidArchitecture/domain/ServiceLocator.dart';
 import 'package:androidArchitecture/domain/TreeRepository.dart';
 import 'package:androidArchitecture/ui/select/BreadcrumbView.dart';
 import 'package:androidArchitecture/ui/select/SelectView.dart';
@@ -13,7 +14,7 @@ class EditorView extends StatefulWidget {
 }
 
 class _EditorViewState extends State<EditorView> {
-  TreeRepository _treeRepository = TreeRepository();
+  final TreeDao _treeRepository = ServiceLocator.instance.getTreeDao();
 
   String _sectionId;
 

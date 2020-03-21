@@ -1,18 +1,23 @@
 import 'package:androidArchitecture/domain/FirebaseRepository.dart';
+import 'package:androidArchitecture/domain/ServiceLocator.dart';
 import 'package:androidArchitecture/domain/UserDao.dart';
 import 'package:androidArchitecture/ui/editing/TechTreeDocument.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
-class TreeRepository {
+/// DAO for accessing the sections and leafs in the tech tree
+///
+class TreeDao {
   static var TechIdAndroid = 'android';
   var firestore = FirebaseRepository.getInstance();
 
-  User user;
+  final _userDao;
+  final TableNames _tableNames;
+  User _user;
 
-  TreeRepository() {
-    UserDao().getUserStream().listen((newUser) {
-      user = newUser;
+  TreeDao(this._userDao, this._tableNames) {
+    _userDao.getUserStream().listen((newUser) {
+      _user = newUser;
     });
   }
 
@@ -20,14 +25,14 @@ class TreeRepository {
   Future<bool> saveSectionDocument(SectionDocument document) async {
     debugPrint("Adding document $document");
     return await firestore.insertDocument(_getSectionTableName(),
-        document.getMap()..putIfAbsent('author', () => user?.uid));
+        document.getMap()..putIfAbsent('author', () => _user?.uid));
   }
 
   Future<bool> saveLeafDocument(LeafDocument document) async {
     debugPrint("Adding document $document");
 
     return await firestore.insertDocument(_getLeafTableName(),
-        document.getMap()..putIfAbsent('author', () => user?.uid));
+        document.getMap()..putIfAbsent('author', () => _user?.uid));
   }
 
   Stream<SectionDocument> getSectionById(String sectionId) {
@@ -67,10 +72,10 @@ class TreeRepository {
   }
 
   String _getSectionTableName() {
-    return _useDebugTable() ? "section_debug" : "section";
+    return _tableNames.sectionDao;
   }
 
   String _getLeafTableName() {
-    return _useDebugTable() ? "leaf_debug" : "leaf";
+    return _tableNames.leafDao;
   }
 }

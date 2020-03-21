@@ -1,3 +1,4 @@
+import 'package:androidArchitecture/domain/ServiceLocator.dart';
 import 'package:androidArchitecture/domain/model/TreeState.dart';
 import 'package:androidArchitecture/ui/ColorPallete.dart';
 import 'package:androidArchitecture/ui/editing/TechTreeDocument.dart';
@@ -20,8 +21,8 @@ class SelectView extends StatefulWidget {
 }
 
 class _SelectViewState extends State<SelectView> {
-  TreeRepository _treeRepository = TreeRepository();
-  TreeState _treeState = TreeState.instance;
+  TreeDao _treeRepository = ServiceLocator.instance.getTreeDao();
+  TreeStateDao _treeState = ServiceLocator.instance.getTreeStateDao();
 
   _SelectViewState();
 

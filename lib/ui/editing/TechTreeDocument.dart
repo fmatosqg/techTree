@@ -6,7 +6,7 @@ abstract class TechTreeDocument {
 }
 
 class SectionDocument extends TechTreeDocument {
-  final String techId = TreeRepository.TechIdAndroid;
+  final String techId = TreeDao.TechIdAndroid;
 
   String id;
   String name;

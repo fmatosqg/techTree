@@ -1,0 +1,49 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // https://firebase.google.com/docs/firestore/security/rules-structure
+    /////////////////////////////////////////////
+    // users
+    match /user/{userId}  {
+     // user can read its own document, but admin creates it
+      allow get  : if request.auth.uid == userId;
+      allow read : if false;
+      allow write: if false;
+    }
+
+    /////////////////////////////////////////////
+    // skeleton data
+    match /section/{document=**}  {
+      allow read : if true ;
+      allow write: if get(/databases/$(database)/documents/user/$(request.auth.uid)).data.role == "admin";
+    }
+    match /leaf/{document=**}  {
+      allow read : if true ;
+      allow write: if get(/databases/$(database)/documents/user/$(request.auth.uid)).data.role == "admin";
+    }
+
+		/////////////////////////////////////////////
+    // user created data
+		match /leaf_state/{userId}  {
+      // user can create and edit their rows
+      allow read,write: if request.auth.uid == userId;
+    }
+
+
+////////////////////////////////////
+// test env section
+   match /d_section/{document=**}  {
+      allow read : if true;
+      allow write: if true;
+    }
+    match /d_leaf/{document=**}  {
+      allow read : if true;
+      allow write: if true;
+    }
+    match /d_leaf_state/{document=**}  {
+      allow read : if true;
+      allow write: if true;
+    }
+  }
+}

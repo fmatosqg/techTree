@@ -4,19 +4,22 @@ import 'package:androidArchitecture/domain/UserDao.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../ServiceLocator.dart';
+
 /// Holds the state of the selected buttons in the chosen tree
 ///
-class TreeState {
-  static var instance = TreeState();
+class TreeStateDao {
+  final UserDao _userDao;
+  final AnalyticsTracker _analytics;
+  final Firestore _firestore;
+  final TableNames _tableNames;
 
-  final _userDao = UserDao();
-
-  final _analytics = AnalyticsTracker();
   final _stateMap = Map<String, dynamic>();
 
   var _init = false;
 
-  TreeState() {
+  TreeStateDao(
+      this._userDao, this._analytics, this._firestore, this._tableNames) {
     _loadMap();
   }
 
@@ -40,30 +43,26 @@ class TreeState {
     _analytics.leafSelection(newState, leafId, leafName);
   }
 
-  String _getLeafStateTableName() {
-    return "leaf_state";
-  }
-
   void _loadMap() {
     _userDao.getUserId().then((uid) {
-      Firestore.instance
-          .collection(_getLeafStateTableName())
+      debugPrint("Get userr $uid");
+      _firestore
+          .collection(_tableNames.treeStateDao)
           .document(uid)
           ?.snapshots()
           ?.first
           ?.then((value) {
         debugPrint("loading map $value - ${value.data.entries}");
         _stateMap.addAll(value.data);
-        debugPrint("loading map ${value.data}");
-        debugPrint("loading map 2 $_stateMap");
+        debugPrint("loading map 22 $_stateMap");
       });
     });
   }
 
   void _saveToFirestore(String leafId, bool newState) {
     _userDao.getUserId().then((uid) {
-      Firestore.instance
-          .collection(_getLeafStateTableName())
+      _firestore
+          .collection(_tableNames.treeStateDao)
           .document(uid)
           .setData(_stateMap);
     });

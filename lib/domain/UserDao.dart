@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:androidArchitecture/domain/ServiceLocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,7 +8,11 @@ import 'package:flutter/cupertino.dart';
 import 'FirebaseRepository.dart';
 
 class UserDao {
-  var _firebaseAuth = FirebaseRepository.getInstance().firebaseAuth;
+  final _firebaseAuth = FirebaseRepository.getInstance().firebaseAuth;
+
+  final TableNames _tableNames;
+
+  UserDao(this._tableNames);
 
   Future<String> getUserId() async {
     var user = await _firebaseAuth.currentUser();
@@ -23,7 +28,7 @@ class UserDao {
   }
 
   _getUserTableName() {
-    return "user";
+    return _tableNames.userDao;
   }
 
   /// Finds a User in firestore associated with FirebaseUser

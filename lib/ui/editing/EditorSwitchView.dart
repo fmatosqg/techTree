@@ -1,3 +1,4 @@
+import 'package:androidArchitecture/domain/ServiceLocator.dart';
 import 'package:androidArchitecture/domain/UserDao.dart';
 import 'package:androidArchitecture/domain/editing/EditorRepository.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,8 +12,8 @@ class EditorSwitchView extends StatefulWidget {
 }
 
 class _EditorSwitchViewState extends State<EditorSwitchView> {
-  EditorRepository _editorRepository = EditorRepository.getInstance();
-  UserDao _userDao = UserDao();
+  final EditorRepository _editorRepository = EditorRepository.getInstance();
+  final UserDao _userDao = ServiceLocator.instance.getUserDao();
 
   bool _isUserEditor = false;
   bool _isInEditMode = false;
