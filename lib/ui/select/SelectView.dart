@@ -13,9 +13,7 @@ class SelectView extends StatefulWidget {
 
   final _SelectViewState _state = _SelectViewState();
 
-  SelectView(this.sectionId) {
-    debugPrint("Create selectview with id $sectionId");
-  }
+  SelectView(this.sectionId);
 
   @override
   State<StatefulWidget> createState() => _SelectViewState();
@@ -25,9 +23,7 @@ class _SelectViewState extends State<SelectView> {
   TreeRepository _treeRepository = TreeRepository();
   TreeState _treeState = TreeState.instance;
 
-  _SelectViewState() {
-    debugPrint("_SelectViewState");
-  }
+  _SelectViewState();
 
   Widget buildNavigation(BuildContext context) {
     return Padding(
@@ -48,10 +44,10 @@ class _SelectViewState extends State<SelectView> {
     );
   }
 
-  void tapButton(String id) {
+  void tapButton(String sectionId, String sectionName) {
     debugPrint("Hello ");
     setState(() {
-      _treeState.toggleSelectedState(id);
+      _treeState.toggleSelectedState(sectionId, sectionName);
     });
   }
 
@@ -76,7 +72,7 @@ class _SelectViewState extends State<SelectView> {
                 return SelectButton(
                     _treeState.isSelected(leaf.id), leaf.name, leaf.id,
                     onPressed: () {
-                  tapButton(leaf.id);
+                  tapButton(leaf.id, leaf.name);
                 });
               },
             )?.toList() ??

@@ -78,8 +78,7 @@ class _EditorViewState extends State<EditorView> {
     );
   }
 
-  _navigateToSection(String sectionId) {
-    debugPrint("Section id is $sectionId");
+  _navigateToSection(String sectionId, String sectionName) {
     setState(() {
       _sectionId = sectionId;
     });

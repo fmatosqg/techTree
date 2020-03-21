@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 /// navigate to different techs to select them.
 ///
 class BreadCrumbView extends StatefulWidget {
-  final Function(String sectionId) _navigateToSection;
+  final Function(String sectionId, String name) _navigateToSection;
 
   BreadCrumbView(this._navigateToSection);
 
@@ -19,7 +19,7 @@ class BreadCrumbView extends StatefulWidget {
 class _BreadCrumbState extends State<BreadCrumbView> {
   String _selectedSectionId;
 
-  Function(String sectionId) _navigateToSection;
+  Function(String sectionId, String sectionName) _navigateToSection;
 
   _BreadCrumbState(this._navigateToSection);
 
@@ -54,7 +54,7 @@ class _BreadCrumbState extends State<BreadCrumbView> {
       color: _getButtonColor(context, section.id),
       child: Text(section?.name ?? "empty"),
       onPressed: () {
-        _navigateToSection(section?.id ?? "empty");
+        _navigateToSection(section?.id ?? "empty", section?.name);
         setState(() {
           _selectedSectionId = section.id;
         });

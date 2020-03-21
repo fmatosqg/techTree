@@ -1,4 +1,5 @@
 import 'package:androidArchitecture/auth/LoginView.dart';
+import 'package:androidArchitecture/domain/AnalyticsTracker.dart';
 import 'package:androidArchitecture/domain/editing/EditorRepository.dart';
 import 'package:androidArchitecture/ui/ColorPallete.dart';
 import 'package:androidArchitecture/ui/editing/EditorView.dart';
@@ -7,6 +8,8 @@ import 'package:androidArchitecture/ui/select/SelectView.dart';
 import 'package:flutter/cupertino.dart';
 
 class LandingView extends StatefulWidget {
+  var _analytics = AnalyticsTracker();
+
   @override
   _LandingViewState createState() => _LandingViewState();
 }
@@ -16,8 +19,9 @@ class _LandingViewState extends State<LandingView> {
 
   String _sectionId;
 
-  _navigateToSection(String sectionId) {
-    debugPrint("Section name is $sectionId");
+  _navigateToSection(String sectionId, String sectionName) {
+    widget._analytics.sectionChange(sectionId, sectionName);
+
     setState(() {
       _sectionId = sectionId;
     });
