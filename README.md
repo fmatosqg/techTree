@@ -48,14 +48,22 @@ Make sure the flutter binaries are set to the beta channel:
  
 ### For allowing login with Google sign in
 - drop down the `main.dart` run configuration
-- on arguments add `--web-port 5000`
+- on arguments add `--web-port 5000 --web-hostname localhost`
 - instead of choosing `chrome (web)` choose `web server (web)`
 - instead of hitting debug hit run (to be confirmed)
 
 ## from command line 
 - `flutter packages pub run build_runner watch`
-- `flutter run -d chrome --web-port 5000` where port 5000 was specified as authorized for google sign in on https://console.developers.google.com/apis/credentials/oauthclient/  then click on Credentials / OAUTH 2.0 client ids and then click edit.
+- `flutter run -d chrome --web-port 5000 --web-hostname localhost` where port 5000 was specified as authorized for google sign in on https://console.developers.google.com/apis/credentials/oauthclient/  then click on Credentials / OAUTH 2.0 client ids and then click edit.
 - press `r` on console for hot reloading or `R` for hot restart
+
+## from command line with release build
+- `flutter build web`
+- `cd build/web && python -m SimpleHTTPServer 5000`
+
+Why port 5000? because that's assuming what's authorized in Google Auth for localhost.
 
 # Build and deploy
 - `flutter build web`
+
+

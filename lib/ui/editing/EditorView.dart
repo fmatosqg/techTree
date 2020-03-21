@@ -1,5 +1,4 @@
 import 'package:androidArchitecture/domain/TreeRepository.dart';
-import 'package:androidArchitecture/ui/ColorPallete.dart';
 import 'package:androidArchitecture/ui/select/BreadcrumbView.dart';
 import 'package:androidArchitecture/ui/select/SelectView.dart';
 import 'package:flutter/cupertino.dart';

@@ -1,3 +1,4 @@
+import 'package:androidArchitecture/domain/TreeRepository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class TechTreeDocument {
@@ -5,6 +6,8 @@ abstract class TechTreeDocument {
 }
 
 class SectionDocument extends TechTreeDocument {
+  final String techId = TreeRepository.TechIdAndroid;
+
   String id;
   String name;
 
@@ -24,7 +27,11 @@ class SectionDocument extends TechTreeDocument {
 
   @override
   Map<String, String> getMap() {
-    return {'name': name};
+    // id will be automatically created by firebase
+    return {
+      'techId': techId,
+      'name': name,
+    };
   }
 }
 
@@ -43,6 +50,10 @@ class LeafDocument extends TechTreeDocument {
 
   @override
   Map<String, String> getMap() {
-    return {'sectionId': sectionId, 'name': name};
+    // id will be automatically created by firebase
+    return {
+      'sectionId': sectionId,
+      'name': name,
+    };
   }
 }

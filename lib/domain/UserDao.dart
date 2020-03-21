@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'FirebaseRepository.dart';
@@ -14,72 +15,65 @@ class UserDao {
 
   /// Returns a stream of User that emits when the user changes (not when the database changes)
   ///
-  Stream<User> _getUserStreamUnsafe() {
-    return _firebaseAuth.onAuthStateChanged
-        .map((event) {
-          debugPrint(
-              "Event here is $event ${event?.uid} ${event?.displayName}");
-          return event;
-        })
-        .map((firebaseUser) => Firestore.instance
-            .collection(_getUserTableName())
-            .document(firebaseUser?.uid ?? User.anonymousUid))
-        .asyncMap((event) => event.get())
-        .map((event) => User.fromDocument(event));
-  }
-
+  ///
   Stream<User> getUserStream() {
-    return StreamTransformer<User, User>.fromHandlers(
-        handleData: (User user, EventSink sink) {
-      sink.add(user);
-    }, handleError: (error, stacktrace, sink) {
-      debugPrint("Cannot retrieve user row ${error}");
-      sink.add(User.asAnonymous());
-    }).bind(_getUserStreamUnsafe()).handleError((error) {
-      debugPrint("Another error");
-    });
+    return _firebaseAuth.onAuthStateChanged
+        .asyncMap((user) => _firebaseAuthToDomainUser(user).first);
   }
 
   _getUserTableName() {
     return "user";
   }
 
-  Future<User> whatevs(Stream<DocumentSnapshot> doc) async {
-    var d = await doc.first;
-
-    return User.fromDocument(d);
+  /// Finds a User in firestore associated with FirebaseUser
+  Stream<User> _firebaseAuthToDomainUser(FirebaseUser firebaseUser) {
+    if (firebaseUser?.isAnonymous ?? true) {
+      return Stream.fromFuture(Future.microtask(() =>
+          User.asAnonymousWithUid(firebaseUser?.uid ?? User.anonymousUid)));
+    } else {
+      return StreamTransformer<DocumentSnapshot, User>.fromHandlers(
+        handleData: (DocumentSnapshot documentSnapshot, EventSink sink) {
+          sink.add(User.fromDocument(documentSnapshot));
+        },
+        handleError: (error, stacktrace, sink) {
+          debugPrint("Cannot retrieve user row ${error}");
+          sink.add(
+              User.asAnonymousWithUid(firebaseUser?.uid ?? User.anonymousUid));
+        },
+      ).bind(Firestore.instance
+          .collection(_getUserTableName())
+          .document(firebaseUser?.uid ?? User.anonymousUid)
+          .snapshots());
+    }
   }
 }
 
 class User {
   static var anonymousUid = '0';
 
-  bool _isAdmin;
+  final bool isAdmin;
 
-  String name;
+  final String name;
 
-  bool isEditor;
+  final bool isEditor;
 
-  String uid;
+  final String uid;
 
-  User() {
-    _isAdmin = false;
-    isEditor = false;
-    uid = '';
-  }
+  User.asAnonymousWithUid(String uid)
+      : uid = uid,
+        isEditor = false,
+        isAdmin = false,
+        name = 'Anonymous';
 
-  User.asAnonymous() {
-    isEditor = false;
-    _isAdmin = false;
-    uid = anonymousUid;
-    name = 'Anonymous';
-  }
+  User.asAnonymous()
+      : uid = anonymousUid,
+        isEditor = false,
+        isAdmin = false,
+        name = 'Anonymous';
 
-  User.fromDocument(DocumentSnapshot doc) {
-    debugPrint("Snapshot user is ${doc.toString()}");
-    _isAdmin = doc['admin'];
-    name = doc['name'];
-    isEditor = doc['editor'];
-    uid = doc.documentID;
-  }
+  User.fromDocument(DocumentSnapshot doc)
+      : uid = doc.documentID,
+        isEditor = doc['editor'],
+        isAdmin = doc['admin'],
+        name = doc['name'];
 }

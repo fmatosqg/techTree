@@ -6,7 +6,7 @@ import 'package:androidArchitecture/domain/AnalyticsTracker.dart';
 class TreeState {
   static var instance = TreeState();
 
-  var _analytics = AnalyticsTracker();
+  final _analytics = AnalyticsTracker();
   var _stateMap = Map<String, bool>();
 
   bool isSelected(String id) {

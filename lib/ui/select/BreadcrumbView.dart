@@ -19,6 +19,8 @@ class BreadCrumbView extends StatefulWidget {
 class _BreadCrumbState extends State<BreadCrumbView> {
   String _selectedSectionId;
 
+  var _techId = TreeRepository.TechIdAndroid;
+
   Function(String sectionId, String sectionName) _navigateToSection;
 
   _BreadCrumbState(this._navigateToSection);
@@ -28,7 +30,7 @@ class _BreadCrumbState extends State<BreadCrumbView> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: _treeRepository.getAllSections(),
+        stream: _treeRepository.getAllSections(_techId),
         builder: (context, snapshop) {
           return _buildSections(context, snapshop.data);
         });

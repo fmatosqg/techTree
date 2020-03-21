@@ -68,7 +68,7 @@ class FirebaseRepository {
     }
   }
 
-  Stream<QuerySnapshot> getDocumentList(String tableName) {
-    return Firestore.instance.collection(tableName).snapshots();
+  CollectionReference getDocumentList(String tableName) {
+    return Firestore.instance.collection(tableName);
   }
 }

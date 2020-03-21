@@ -67,7 +67,7 @@ class NewSectionView extends StatelessWidget {
         )
         .toList()
           ..insert(0, _buildCloseButton())
-          ..add(_buildSaveButton(context));
+          ..add(_buildSaveButton(context, firstFocusNode));
   }
 
   Widget _buildInputText(
@@ -103,7 +103,7 @@ class NewSectionView extends StatelessWidget {
     );
   }
 
-  Widget _buildSaveButton(BuildContext context) {
+  Widget _buildSaveButton(BuildContext context, FocusNode focusAfterSave) {
     return Wrap(
       spacing: 32,
       children: <Widget>[
@@ -116,8 +116,7 @@ class NewSectionView extends StatelessWidget {
                 controllerMap.forEach((key, value) {
                   value.text = "";
                 });
-
-                _buildFeedback(context, "Insert successfull");
+                FocusScope.of(context).requestFocus(focusAfterSave);
               } else {
                 _buildFeedback(context, "Insert failed");
               }
