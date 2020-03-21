@@ -16,13 +16,15 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   GoogleSignInAccount _currentUser;
 
-  final _googleSignIn = FirebaseRepository.getInstance().googleSignIn;
-  final _firebaseAuth = FirebaseRepository.getInstance().firebaseAuth;
+  var _controller = LoginController();
 
   @override
   void initState() {
     super.initState();
-    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
+
+    // TODO move into function in controller
+    _controller._googleSignIn.onCurrentUserChanged
+        .listen((GoogleSignInAccount account) {
       setState(() {
         if (account != null) {
           debugPrint("Current user is " + account.id);
@@ -33,8 +35,34 @@ class _LoginViewState extends State<LoginView> {
       });
     });
 
-    _googleSignIn.signInSilently();
+    _controller._googleSignIn.signInSilently().then((value) {
+      if (value == null) {
+        debugPrint("Anon user shoud log in");
+        _controller._anonLogin();
+      }
+    });
   }
+
+  Widget build(BuildContext context) {
+    if (_currentUser != null) {
+      return FlatButton(
+        onPressed: _controller._handleSignOut,
+        child: GoogleUserCircleAvatar(
+          identity: _currentUser,
+        ),
+      );
+    } else {
+      return OutlineButton(
+        child: const Text('LOG IN'),
+        onPressed: _controller._handleSignIn,
+      );
+    }
+  }
+}
+
+class LoginController {
+  final _googleSignIn = FirebaseRepository.getInstance().googleSignIn;
+  final _firebaseAuth = FirebaseRepository.getInstance().firebaseAuth;
 
   Future<void> _handleSignIn() async {
     try {
@@ -51,28 +79,17 @@ class _LoginViewState extends State<LoginView> {
       final FirebaseUser user =
           (await _firebaseAuth.signInWithCredential(credential)).user;
       debugPrint("signed in " + user.displayName);
-
-//      return user;
     } catch (error) {
       debugPrint("Hello error 1 " + error.toString());
     }
   }
 
-  Future<void> _handleSignOut() => _googleSignIn.disconnect();
+  Future<void> _handleSignOut() {
+    _googleSignIn.disconnect();
+    _firebaseAuth.signOut();
+  }
 
-  Widget build(BuildContext context) {
-    if (_currentUser != null) {
-      return FlatButton(
-        onPressed: _handleSignOut,
-        child: GoogleUserCircleAvatar(
-          identity: _currentUser,
-        ),
-      );
-    } else {
-      return OutlineButton(
-        child: const Text('LOG IN'),
-        onPressed: _handleSignIn,
-      );
-    }
+  _anonLogin() {
+    _firebaseAuth.signInAnonymously();
   }
 }

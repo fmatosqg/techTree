@@ -1,3 +1,4 @@
+import 'package:androidArchitecture/domain/UserDao.dart';
 import 'package:androidArchitecture/domain/editing/EditorRepository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,9 @@ class EditorSwitchView extends StatefulWidget {
 
 class _EditorSwitchViewState extends State<EditorSwitchView> {
   EditorRepository _editorRepository = EditorRepository.getInstance();
+  UserDao _userDao = UserDao();
 
+  bool _isUserEditor = false;
   bool _isInEditMode = false;
 
   @override
@@ -23,12 +26,23 @@ class _EditorSwitchViewState extends State<EditorSwitchView> {
         _isInEditMode = event;
       });
     });
+
+    _userDao.getUserStream().listen((user) {
+      debugPrint("User got here!!! ${user.isEditor} ${user.name} ${user.uid}");
+      setState(() {
+        _isUserEditor = user.isEditor;
+        if (!_isUserEditor) {
+          _isInEditMode = false;
+        }
+      });
+    });
   }
 
   Widget build(BuildContext context) {
-    if (_isInEditMode == null) {
+    if (!_isUserEditor) {
       return Container();
     }
+
     return Row(
       children: <Widget>[
         Switch(

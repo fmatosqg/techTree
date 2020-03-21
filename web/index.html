@@ -18,7 +18,7 @@
 </head>
 <body>
 
-<script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js" ></script>
 <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-firestore.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-analytics.js"></script>
@@ -37,13 +37,17 @@
     fetch("secrets.json")
         .then(response => response.json())
         .then(json =>  {
+          console.log("Initializing firebase");
+
             firebase.initializeApp(json);
             firebase.analytics();
 
             document.getElementById('google-signin')
                 .setAttribute('content', json.google_signin);
+
+          console.log("Firebase loading worked")
         }  )
-        .then( console.log("Firebase loading worked"));
+
 
 
 </script>

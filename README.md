@@ -19,6 +19,8 @@ Then to actually sign in either open a fresh chrome window not launched by flutt
 See more details at https://stackoverflow.com/questions/59480956/browser-or-app-may-not-be-secure-try-using-a-different-browser-error-with-fl
 
 ## Firebase firestore
+https://firebase.google.com/docs/firestore/security/rules-structure
+
 ### Adding write privileges to /user table
  To add another admin to firebase,
 - log in with the desired user

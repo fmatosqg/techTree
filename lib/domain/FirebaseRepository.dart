@@ -43,22 +43,6 @@ class FirebaseRepository {
 
   init() async {
     _configure();
-    _configureGoogleSignIn();
-  }
-
-  query() {
-    debugPrint("Query it");
-    var collectionName = "section";
-    Firestore.instance.collection(collectionName).snapshots().listen((event) {
-      debugPrint("Found collection section $collectionName  $event ");
-
-      var l = event.documents.length;
-
-      debugPrint("Found $l documents");
-      event.documents.forEach((element) {
-        debugPrint("row is $element - ${element['id']} = ${element['name']} ");
-      });
-    });
   }
 
   Future<void> _configure() async {
@@ -67,24 +51,6 @@ class FirebaseRepository {
       options: firebaseOptions,
     );
     assert(app != null);
-  }
-
-  bool insert(String userid) {
-    Map<String, String> document = {
-      'userid': userid,
-      'id': 'id22 4',
-      'name': 'write test 33',
-      'hello': 'worlddd'
-    };
-
-    try {
-      Firestore.instance.collection("section")?.add(document);
-      return true;
-    } catch (e) {
-      debugPrint("Something failed " + e.toString());
-    }
-
-    return false;
   }
 
   /// Inserts document and returns true if successfull
@@ -105,6 +71,4 @@ class FirebaseRepository {
   Stream<QuerySnapshot> getDocumentList(String tableName) {
     return Firestore.instance.collection(tableName).snapshots();
   }
-
-  void _configureGoogleSignIn() {}
 }

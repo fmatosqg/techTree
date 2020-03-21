@@ -10,7 +10,6 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   FirebaseRepository.getInstance().init();
-
   runApp(MyApp());
 }
 
