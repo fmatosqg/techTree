@@ -9,8 +9,9 @@ import 'FirebaseRepository.dart';
 class UserDao {
   var _firebaseAuth = FirebaseRepository.getInstance().firebaseAuth;
 
-  Future<User> getUser() async {
-    return getUserStream().first;
+  Future<String> getUserId() async {
+    var user = await _firebaseAuth.currentUser();
+    return user.uid;
   }
 
   /// Returns a stream of User that emits when the user changes (not when the database changes)
@@ -49,7 +50,7 @@ class UserDao {
 }
 
 class User {
-  static var anonymousUid = '0';
+  static final anonymousUid = '0';
 
   final bool isAdmin;
 
@@ -69,7 +70,7 @@ class User {
       : uid = anonymousUid,
         isEditor = false,
         isAdmin = false,
-        name = 'Anonymous';
+        name = 'Anonymous w/o id';
 
   User.fromDocument(DocumentSnapshot doc)
       : uid = doc.documentID,

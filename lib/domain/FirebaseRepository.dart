@@ -55,7 +55,7 @@ class FirebaseRepository {
 
   /// Inserts document and returns true if successfull
   Future<bool> insertDocument(
-      String tableName, Map<String, String> document) async {
+      String tableName, Map<String, dynamic> document) async {
     try {
       var d = await Firestore.instance.collection(tableName)?.add(document);
 
