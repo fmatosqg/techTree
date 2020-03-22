@@ -39,7 +39,8 @@ class UserDao {
     } else {
       return StreamTransformer<DocumentSnapshot, User>.fromHandlers(
         handleData: (DocumentSnapshot documentSnapshot, EventSink sink) {
-          sink.add(User.fromDocument(documentSnapshot));
+          sink.add(
+              User.fromDocument(documentSnapshot, firebaseUser?.isAnonymous));
         },
         handleError: (error, stacktrace, sink) {
           debugPrint("Cannot retrieve user row ${error}");
@@ -65,21 +66,26 @@ class User {
 
   final String uid;
 
+  final bool isAnon;
+
   User.asAnonymousWithUid(String uid)
       : uid = uid,
         isEditor = false,
         isAdmin = false,
-        name = 'Anonymous';
+        name = 'Anonymous',
+        isAnon = true;
 
   User.asAnonymous()
       : uid = anonymousUid,
         isEditor = false,
         isAdmin = false,
-        name = 'Anonymous w/o id';
+        name = 'Anonymous w/o id',
+        isAnon = true;
 
-  User.fromDocument(DocumentSnapshot doc)
+  User.fromDocument(DocumentSnapshot doc, bool isAnon)
       : uid = doc.documentID,
         isEditor = doc['editor'],
         isAdmin = doc['admin'],
-        name = doc['name'];
+        name = doc['name'],
+        isAnon = isAnon;
 }

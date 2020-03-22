@@ -30,6 +30,7 @@ class ServiceLocator {
 class TableNames {
   final leafDao = "leaf";
   final treeStateDao = "leaf_state";
+  final treeStateProjectDao = "proj"; // this is nested inside treeStateDao
   final sectionDao = "section";
 
   final userDao = "user";

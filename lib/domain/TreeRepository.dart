@@ -9,7 +9,9 @@ import 'package:flutter/foundation.dart';
 ///
 class TreeDao {
   static var TechIdAndroid = 'android';
-  var firestore = FirebaseRepository.getInstance();
+  static var DefaultProj = 'defproj';
+
+  final firestore = FirebaseRepository.getInstance();
 
   final _userDao;
   final TableNames _tableNames;

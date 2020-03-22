@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../ServiceLocator.dart';
+import '../TreeRepository.dart';
 
 /// Holds the state of the selected buttons in the chosen tree
 ///
@@ -24,7 +25,6 @@ class TreeStateDao {
   }
 
   bool isSelected(String id) {
-    debugPrint("Whole map $_stateMap");
     return _stateMap[id] ?? false;
   }
 
@@ -38,6 +38,7 @@ class TreeStateDao {
     } else {
       _stateMap.remove(leafId); // keep the map (and firestore) lean
     }
+    debugPrint("Whole map $_stateMap");
     _saveToFirestore(leafId, newState);
 
     _analytics.leafSelection(newState, leafId, leafName);
@@ -49,6 +50,8 @@ class TreeStateDao {
       _firestore
           .collection(_tableNames.treeStateDao)
           .document(uid)
+          .collection(_tableNames.treeStateProjectDao)
+          .document(TreeDao.DefaultProj)
           ?.snapshots()
           ?.first
           ?.then((value) {
@@ -61,9 +64,13 @@ class TreeStateDao {
 
   void _saveToFirestore(String leafId, bool newState) {
     _userDao.getUserId().then((uid) {
+      _firestore.collection(_tableNames.treeStateDao).document(uid).setData({});
+
       _firestore
           .collection(_tableNames.treeStateDao)
           .document(uid)
+          .collection(_tableNames.treeStateProjectDao)
+          .document(TreeDao.DefaultProj)
           .setData(_stateMap);
     });
   }

@@ -1,4 +1,5 @@
 import 'package:androidArchitecture/domain/FirebaseRepository.dart';
+import 'package:androidArchitecture/domain/ServiceLocator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,8 +38,14 @@ class _LoginViewState extends State<LoginView> {
 
     _controller._googleSignIn.signInSilently().then((value) {
       if (value == null) {
-        debugPrint("Anon user shoud log in");
-        _controller._anonLogin();
+        FirebaseAuth.instance.currentUser().then((value) {
+          if (value == null) {
+            debugPrint("Anon user shoud log in");
+            _controller._anonLogin();
+          } else {
+            debugPrint("Found firebase user with auto login");
+          }
+        });
       }
     });
   }
