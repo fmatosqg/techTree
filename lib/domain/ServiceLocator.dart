@@ -8,6 +8,8 @@ import 'UserDao.dart';
 class ServiceLocator {
   static final instance = ServiceLocator();
 
+  static final SourceCode = "https://github.com/fmatosqg/techTree";
+
   static final _userDao = UserDao(_tableNames);
   static final _analyticsTracker = AnalyticsTracker();
 

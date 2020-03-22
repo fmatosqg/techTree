@@ -1,11 +1,14 @@
 import 'package:androidArchitecture/auth/LoginView.dart';
 import 'package:androidArchitecture/domain/AnalyticsTracker.dart';
+import 'package:androidArchitecture/domain/ServiceLocator.dart';
 import 'package:androidArchitecture/domain/editing/EditorRepository.dart';
 import 'package:androidArchitecture/ui/ColorPallete.dart';
 import 'package:androidArchitecture/ui/editing/EditorView.dart';
 import 'package:androidArchitecture/ui/select/BreadcrumbView.dart';
 import 'package:androidArchitecture/ui/select/SelectView.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LandingView extends StatefulWidget {
   var _analytics = AnalyticsTracker();
@@ -94,11 +97,22 @@ class _LandingViewState extends State<LandingView> {
               ),
             ),
             Expanded(
-              child: Text(""),
+              child: _buildRepositoryLink(
+                  context, "Source code at github", ServiceLocator.SourceCode),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildRepositoryLink(BuildContext context, String msg, String link) {
+    return InkWell(
+      child: Text(
+        msg,
+        style: ColorPallete.of(context).textStyleLink,
+      ),
+      onTap: () => launch(link),
     );
   }
 }

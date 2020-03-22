@@ -27,6 +27,8 @@ class ColorPallete {
 
   ThemeData _themeData;
 
+  TextStyle textStyleLink;
+
   ColorPallete(BuildContext context) {
     var parentTheme = Theme.of(context);
 
@@ -45,6 +47,8 @@ class ColorPallete {
           hoverColor: orangeLight,
           selectedColor: orange),
     );
+
+    textStyleLink = _themeData.textTheme.caption.copyWith(color: orangeLight);
   }
 
   final breadCrumbBackground = orangeDark;
