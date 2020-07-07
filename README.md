@@ -44,7 +44,18 @@ Make sure the flutter binaries are set to the beta channel:
 - pick `chrome (web)` from the device drop down
 - hit run or debug and a new chrome window should open
 - if pressing `ctrl+s` all files are immediately saved and a hot restart is triggered (you can also do that by pressing the floppy disk icon to save all). Note that if the IDE auto-saves all files it won't trigger a hot restart. Note also that this is an opt-in on the preferences/languagues and frameworks/flutter
+- By default the hot reload shortcutedit pubspec.yaml because it will drop automatically)
+- pick `chrome (web)` from the device drop down
+- hit run or debug and a new chrome window should open
+- if pressing `ctrl+s` all files are immediately saved and a hot restart is triggered (you can also do that by pressing the floppy disk icon to save all). Note that if the IDE auto-saves all files it won't trigger a hot restart. Note also that this is an opt-in on the preferences/languagues and frameworks/flutter
 - By default the hot reload shortcut is `ctrl+\`
+ 
+### For allowing login with Google sign in
+- drop down the `main.dart` run configuration
+- on arguments add `--web-port 5000 --web-hostname localhost`
+- instead of choosing `chrome (web)` choose `web server (web)`
+- instead of hitting debug hit run (to be confirmed)
+ is `ctrl+\`
  
 ### For allowing login with Google sign in
 - drop down the `main.dart` run configuration
